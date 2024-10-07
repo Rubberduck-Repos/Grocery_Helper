@@ -1,5 +1,6 @@
 function searchMeal(req, res){
-    res.render("meal", {text: "This is how to make " + req.body.meal})
+    input = req.body.meal
+    res.render("meal", {text: "This is how to make " + input})
 }
 
 module.exports = {
