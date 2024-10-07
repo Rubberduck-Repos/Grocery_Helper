@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  isTutor   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  tutorClasses  tutorclasses[] // A tutor can have multiple classes
+}
+
+model classes {
+  id        Int    @id @default(autoincrement())
+  className String
+  classCode String @unique
+
+  // Relations
+  tutors tutorclasses[]
+}
+
+model tutorclasses {
+  tutorId  Int
+  classId  Int
+  tutor    users  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  class    classes @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@id([tutorId, classId]) // Composite primary key
+}

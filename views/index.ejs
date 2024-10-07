@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <% if (user) {%>
+    <h1>WELCOME BACK <%= user.firstName %> <%= user.lastName %></h1>
+    
+    <a href="/log-out">LOG OUT</a>
+  <% } else { %>
+    <h1>please log in</h1>
+    <form action="/log-in" method="POST">
+      <label for="email">Email: </label>
+      <input id="email" name="email" placeholder="Email" type="email" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" />
+      <button type="submit">Log In</button>
+    </form>
+    <a href="/sign-up">Sign Up</a>
+  <%}%>
+</body>
+</html>
