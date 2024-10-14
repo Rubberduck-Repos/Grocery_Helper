@@ -5,6 +5,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+
 async function searchMeal(req, res){
     const input = req.body.meal;
     try {
