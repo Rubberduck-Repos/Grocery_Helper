@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Recipe for <%= mealName %></title>
 </head>
 <body>
-  <p><%- text %></p>
+  <h1>Recipe for <%= mealName %></h1>
+  <h2>Ingredients</h2>
+  <p><%- ingredients %></p>
+  <h2>Instructions</h2>
+  <p><%- instructions %></p>
   <a href="/">Back</a>
 </body>
 </html>
