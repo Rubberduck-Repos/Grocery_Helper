@@ -9,3 +9,5 @@ How to use
 - take recipe steps and give to Brady to organize and look better
 ##### Brady
 - UI ?
+##### Evan
+- Albertsons scrape / API
