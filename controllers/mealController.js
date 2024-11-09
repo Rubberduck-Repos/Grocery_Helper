@@ -35,26 +35,33 @@ async function searchMeal(req, res){
             temperature: 0.7,
         });
         const recipe = response.choices[0].message.content;
-        // split recipe into ingredients and instructions
+        // Split recipe into ingredients and instructions
         const ingredientsIndex = recipe.indexOf("Ingredients");
         const instructionsIndex = recipe.indexOf("Instructions");
 
-        let ingredients = recipe.substring(ingredientsIndex + 11, instructionsIndex).trim();
-        let instructions = recipe.substring(instructionsIndex + 12).trim();
-        
-        const instructions_titles = [];
-        const instructions_details = [];
+        let ingredientsText = recipe.substring(ingredientsIndex + 11, instructionsIndex).trim();
+        let instructionsText = recipe.substring(instructionsIndex + 12).trim();
 
-        const instruction_steps = instructions.split(/####\s*Step \d+:/);
+        // Parse ingredients into an array of strings
+        const ingredients = ingredientsText
+            .split(/\n+/) // Split by newline characters
+            .map(item => item.replace(/^-/, '').trim()) // Remove leading dashes and trim whitespace
+            .filter(item => item); // Filter out any empty strings
 
-        instruction_steps.forEach(step => {
+        // Parse instructions into two lists: step titles and step details
+        const instructionsTitles = [];
+        const instructionsDetails = [];
+
+        const instructionSteps = instructionsText.split(/Step \d+:/);
+
+        instructionSteps.forEach(step => {
             if (step.trim()) {
-                const first_period_index = step.indexOf('.');
-                if (first_period_index !== -1) {
-                    const step_title = step.substring(0, first_period_index + 1).trim();
-                    const step_detail = step.substring(first_period_index + 1).trim();
-                    instructions_titles.push(step_title);
-                    instructions_details.push(step_detail);
+                const firstPeriodIndex = step.indexOf('.');
+                if (firstPeriodIndex !== -1) {
+                    const stepTitle = step.substring(0, firstPeriodIndex + 1).trim();
+                    const stepDetail = step.substring(firstPeriodIndex + 1).trim();
+                    instructionsTitles.push(stepTitle);
+                    instructionsDetails.push(stepDetail);
                 }
             }
         });
