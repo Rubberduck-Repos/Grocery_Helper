@@ -35,6 +35,7 @@ async function searchMeal(req, res){
             temperature: 0.7,
         });
         const recipe = response.choices[0].message.content;
+        console.log(recipe);
         // Split recipe into ingredients and instructions
         const ingredientsIndex = recipe.indexOf("Ingredients");
         const instructionsIndex = recipe.indexOf("Instructions");
@@ -49,8 +50,8 @@ async function searchMeal(req, res){
             .filter(item => item); // Filter out any empty strings
 
         // Parse instructions into two lists: step titles and step details
-        const instructionsTitles = [];
-        const instructionsDetails = [];
+        const instructions_titles = [];
+        const instructions_details = [];
 
         const instructionSteps = instructionsText.split(/Step \d+:/);
 
@@ -60,8 +61,8 @@ async function searchMeal(req, res){
                 if (firstPeriodIndex !== -1) {
                     const stepTitle = step.substring(0, firstPeriodIndex + 1).trim();
                     const stepDetail = step.substring(firstPeriodIndex + 1).trim();
-                    instructionsTitles.push(stepTitle);
-                    instructionsDetails.push(stepDetail);
+                    instructions_titles.push(stepTitle);
+                    instructions_details.push(stepDetail);
                 }
             }
         });
