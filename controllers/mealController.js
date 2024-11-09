@@ -16,7 +16,19 @@ async function searchMeal(req, res){
                 //{ role: "system", content: "You can put a system prompt here if you want" },
                 {
                     role: "user",
-                    content: `Give me a detailed recipe for making ${input}, including a list of ingredients and instructions.`,
+                    content: `Please provide a detailed recipe for making ${input}. Use the following format:
+                    
+                    Ingredients:
+                    - List each ingredient clearly with quantity and units.
+                
+                    Instructions:
+                    Step 1: [Brief step name]
+                    - [Detailed explanation of what to do]
+                    
+                    Step 2: [Brief step name]
+                    - [Detailed explanation of what to do]
+                    
+                    Make sure each step has a name followed by a detailed description, and use clear numbering or markers so that the parsing logic is simple.`
                 },
             ],
             max_tokens: 500,
@@ -30,7 +42,24 @@ async function searchMeal(req, res){
         let ingredients = recipe.substring(ingredientsIndex + 11, instructionsIndex).trim();
         let instructions = recipe.substring(instructionsIndex + 12).trim();
         
-        res.render("meal", { mealName: input, ingredients, instructions });
+        const instructions_titles = [];
+        const instructions_details = [];
+
+        const instruction_steps = instructions.split(/####\s*Step \d+:/);
+
+        instruction_steps.forEach(step => {
+            if (step.trim()) {
+                const first_period_index = step.indexOf('.');
+                if (first_period_index !== -1) {
+                    const step_title = step.substring(0, first_period_index + 1).trim();
+                    const step_detail = step.substring(first_period_index + 1).trim();
+                    instructions_titles.push(step_title);
+                    instructions_details.push(step_detail);
+                }
+            }
+        });
+
+        res.render("meal", { mealName: input, ingredients, instructions_titles, instructions_details });
 
     } catch (error) {
         console.error("Error fetching recipe: ", error);
