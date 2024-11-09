@@ -6,6 +6,9 @@
 </head>
 <body>
   <h1>Recipe for <%= mealName %></h1>
+  <% console.log(ingredients) %>
+  <% console.log(instructions_details) %>
+  <% console.log(instructions_titles) %>
   <% -include("./partials/ingredients.ejs") %>
   <% -include("./partials/instructions.ejs") %>
   <a href="/">Back</a>
